@@ -10,11 +10,14 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Adds a custom field to the network site info page wp-admin/network/site-info.php.
 
+= Prerequisite =
+
+* WordPress Multisite
+
 == Installation ==
 
 1. Upload plugin files to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-
 
 == Frequently Asked Questions ==
 None
