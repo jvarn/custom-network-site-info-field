@@ -11,22 +11,22 @@ Author URI: https://abuyasmeen.com/
 // Prevent Direct Access
 if ( ! defined( 'ABSPATH' ) ) { die; }
 
-function jlv_custom_network_site_info_field() {
+function jlv_custom_network_site_info_form() {
 	
 	submit_button( 'Save Changes', 'primary', 'primary-save', true, "" ); 
 	echo "</form>"; // Close form in site-info.php
 
 	$blogid = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : 0;	
-	$meta_key = 'blog_custom_field';
+	$meta_key = 'blog_custom_label';
 		
-	$saved_custom_field = get_site_meta( $blogid, $meta_key, true );
-	$posted_custom_field = $_POST[$meta_key];
+	$saved_custom_label = get_site_meta( $blogid, $meta_key, true );
+	$posted_custom_label = $_POST[$meta_key];
 	
 	if ( isset( $_REQUEST['action'] ) && 'update-site-custom' === $_REQUEST['action'] ) {
-		if ( isset( $posted_custom_field ) && isset( $saved_custom_field ) ) {
-			update_site_meta( $blogid, $meta_key, $posted_custom_field, false );
+		if ( isset( $posted_custom_label ) && isset( $saved_custom_label ) ) {
+			update_site_meta( $blogid, $meta_key, $posted_custom_label, false );
 		} else if ( isset( $_POST[$meta_key] ) ) {
-			add_site_meta( $blogid, $meta_key, $posted_custom_field, false );
+			add_site_meta( $blogid, $meta_key, $posted_custom_label, false );
 		}
 			
 		$url =	add_query_arg(
@@ -37,10 +37,16 @@ function jlv_custom_network_site_info_field() {
 			'site-info.php'
 		);
 			
+		if ( class_exists('Soderlind\Multisite\SuperAdminAllSitesMenu') ) {
+			$super_admin_sites_menu = new Soderlind\Multisite\SuperAdminAllSitesMenu();
+			$super_admin_sites_menu->refresh_local_storage();
+		}
+	
 		echo("<script>location.href = '".$url."'</script>");
+
 	}
 	
-	$blog_custom_field = get_site_meta( $blogid, $meta_key, true );
+	$blog_custom_label = get_site_meta( $blogid, $meta_key, true );
 	
 	?>
 	 <hr><h3>Custom Fields</h3>
@@ -51,8 +57,8 @@ function jlv_custom_network_site_info_field() {
 					<?php wp_nonce_field( 'edit-site' ); ?>
 					<input type="hidden" name="id" value="<?php echo esc_attr( $blogid ); ?>" />
 					<table class="form-table" role="presentation"><tr class="form-field">
-							<th scope="row"><label for="blog_custom_field"><?php _e( 'Custom Label' ); ?></label></th>
-							<td><input name="blog_custom_field" type="text" id="blog_custom_field" value="<?php echo esc_attr( $blog_custom_field ); ?>"></td>
+							<th scope="row"><label for="blog_custom_label"><?php _e( 'Site Label' ); ?></label></th>
+							<td><input name="blog_custom_label" type="text" id="blog_custom_label" value="<?php echo esc_attr( $blog_custom_label ); ?>"></td>
 						</tr></table>
 			 	</td>
 			 	<td><?php submit_button( 'Save Changes', 'secondary', 'custom-save', true, "" ); ?></td>
@@ -66,4 +72,4 @@ function jlv_custom_network_site_info_field() {
 			
   <?php
 }
-add_action( 'network_site_info_form', 'jlv_custom_network_site_info_field', 10, 0 ); 
+add_action( 'network_site_info_form', 'jlv_custom_network_site_info_form', 10, 0 ); 
